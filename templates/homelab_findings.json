@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0.0",
+  "run": {
+    "run_id": "YYYY-MM-DD-HH-mm-ss",
+    "date": "YYYY-MM-DD",
+    "profile": "Observe",
+    "scope": "192.168.1.0/24",
+    "shell": "bash",
+    "status": "completed"
+  },
+  "findings": [
+    {
+      "finding_id": "F-0001",
+      "status": "open",
+      "classification": "possible risk",
+      "priority": "P2",
+      "asset": "192.168.1.10",
+      "service_or_exposure": "https:443/tcp",
+      "detected_version": "unknown",
+      "version_confidence": "unknown",
+      "confidence": "medium",
+      "reference": "CVE-YYYY-NNNN",
+      "impact": "Potential remote compromise if affected and preconditions match.",
+      "evidence": [
+        "artifacts/YYYY-MM-DD-HH-mm-ss/raw/sv_192.168.1.10.nmap",
+        "https://nvd.nist.gov/vuln/detail/CVE-YYYY-NNNN"
+      ],
+      "recommended_fix": "Upgrade to vendor fixed version or apply vendor-approved mitigation.",
+      "effort": "medium",
+      "retest_step": "nmap -Pn -n -sV -p 443 192.168.1.10",
+      "match_reason": "Service fingerprint suggests affected version family.",
+      "preconditions_text": "Requires externally reachable HTTPS endpoint.",
+      "source_urls": {
+        "primary_source_url": "https://vendor.example/advisory",
+        "secondary_source_url": "https://nvd.nist.gov/vuln/detail/CVE-YYYY-NNNN",
+        "kev_source_url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog"
+      }
+    }
+  ],
+  "allowed_values": {
+    "run_status": [
+      "completed",
+      "blocked_missing_required_tool",
+      "blocked_missing_template",
+      "blocked_no_live_hosts",
+      "skipped_missing_tool",
+      "skipped_no_approval",
+      "failed_command",
+      "not_applicable"
+    ],
+    "status": [
+      "open",
+      "mitigated",
+      "remediated",
+      "accepted_risk"
+    ],
+    "classification": [
+      "confirmed risk",
+      "possible risk",
+      "hygiene finding"
+    ],
+    "priority": [
+      "P1",
+      "P2",
+      "P3"
+    ],
+    "version_confidence": [
+      "high",
+      "medium",
+      "low",
+      "unknown"
+    ],
+    "confidence": [
+      "high",
+      "medium",
+      "low",
+      "unknown"
+    ],
+    "effort": [
+      "low",
+      "medium",
+      "high"
+    ]
+  }
+}
