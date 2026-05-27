@@ -1,9 +1,131 @@
 # flatline-construct
 
-Mission statement:
 `flatline-construct` is a personal homelab defense framework that continuously maps local attack surface, identifies likely vulnerabilities without exploitation, and delivers prioritized hardening actions.
 
-## Initial Spec Assertions
+## What This Project Is
+
+- A focused framework for personal homelab security assessment.
+- A safety-first workflow for discovery, vulnerability research, benign validation, and remediation guidance.
+- A documentation-and-script driven system designed to be usable by both human operators and LLM agents.
+
+## What This Project Is Not
+
+- Not a general-purpose agent framework.
+- Not an exploitation framework.
+- Not a persistence, lateral movement, or destructive testing toolkit.
+
+## Why It Exists
+
+Personal attack surface is increasing quickly as offensive AI capabilities improve. Many home labs have mixed-generation hardware/software and stale patch states. This project exists to methodically identify real risk and provide concrete hardening actions without causing harm.
+
+## Intended Audience
+
+- Primary: home operators running personal homelabs with layered legacy tech.
+- Secondary: agents assisting those operators under strict safety and approval rules.
+
+## Success Criteria
+
+- Maximize high-confidence identification of real vulnerabilities and misconfigurations.
+- Produce actionable fixes with minimal false positives.
+- Keep output high signal: clear rationale, clear evidence, concrete remediation steps.
+
+## Start Here
+
+### Human Operator Path
+
+1. Read `playbooks/how_to_assess_local_network_risk_non_destructively.md`.
+2. Read `references/cve_research_and_remediation_source_map.md`.
+3. Choose run profile: `Observe`, `Validate`, or `Adversarial-safe`.
+4. Use report templates in `templates/` and keep all evidence in `artifacts/<run_id>/...`.
+
+### Agent Path
+
+1. Load this README plus:
+   - `playbooks/how_to_assess_local_network_risk_non_destructively.md`
+   - `references/cve_research_and_remediation_source_map.md`
+   - `templates/homelab_risk_report.md`
+   - `templates/homelab_findings.json`
+   - `templates/homelab_approvals.md`
+2. Enforce non-negotiable safety and approval gates before active checks.
+3. Follow run artifact layout exactly and never invent schema fields or enum values.
+4. Use parser helpers:
+   - `scripts/extract_nmap_live_hosts.py`
+   - `scripts/extract_nmap_open_ports.py`
+
+## Core Workflow
+
+Use this lifecycle for each run:
+
+1. Asset inventory.
+2. Automated and targeted scanning.
+3. Risk prioritization.
+4. Remediation recommendation.
+5. Verification and closure.
+
+## Safety and Autonomy Model
+
+- Default autonomy model is human-in-the-loop.
+- Passive discovery and research can run automatically.
+- Active probing requires explicit user approval per run or profile.
+- Potentially disruptive checks are disabled by default.
+- All automation must be auditable with logs and reproducible command traces.
+
+### Autonomy Profiles (Accepted)
+
+- `Observe` (default): passive inventory plus risk enrichment only.
+- `Validate`: non-destructive active checks; explicit approval required per run.
+- `Adversarial-safe`: deeper non-destructive probing; explicit target allowlist and second confirmation required.
+
+## Outputs and Evidence Contract
+
+- Human-readable output: `report.md`.
+- Machine-readable output: `findings.json` (automation/history support).
+- Approval trace output: `approvals.md`.
+
+Required per-finding baseline fields:
+
+- `asset`
+- `service_or_exposure`
+- `evidence`
+- `reference` (CVE/CWE when available)
+- `confidence`
+- `impact`
+- `recommended_fix`
+- `priority`
+- `effort`
+- `retest_step`
+
+## Repository Guide
+
+- `playbooks/`: step-by-step operational workflows.
+- `references/`: source hierarchies and supporting security methodology.
+- `templates/`: report/schema templates used by humans and agents.
+- `scripts/`: deterministic parsing/helpers used by playbooks.
+- `journal/`: daily work log entries.
+- `plans/`: plan lifecycle files (`future`, `current`, `past`).
+- `kanban/`: lightweight task board state.
+
+## v1 Scope
+
+- Local asset and service discovery.
+- Risk enrichment from known-vulnerability intelligence.
+- Non-destructive active checks under explicit user control.
+- Prioritized hardening recommendation generation.
+- Repeatable markdown reporting with evidence and remediation steps.
+
+## Explicit Non-Goals
+
+- No exploit execution.
+- No persistence, lateral movement, or destructive testing.
+- No offensive automation beyond safe validation checks.
+
+## Integration Boundaries
+
+- Cloud API integrations are deferred by default.
+- Ticketing integrations are deferred by default.
+- Both remain optional v2 capabilities.
+
+## Initial Spec Assertions (Normative)
 
 1. The project exists to defend personal networks in an era of rapidly advancing AI-enabled attack capability.
 2. The primary user is a home operator with a long-lived homelab and mixed-generation hardware/software.
@@ -76,29 +198,3 @@ Mission statement:
   - Anchors scope around defense and remediation.
   - Explicitly excludes exploit-driven goals.
   - Matches primary user and expected output.
-
-## Initial v1 Scope
-
-- Local asset and service discovery.
-- Risk enrichment from known-vulnerability intelligence.
-- Non-destructive active checks under explicit user control.
-- Prioritized hardening recommendation generation.
-- Repeatable markdown reporting with evidence and remediation steps.
-
-## Explicit Non-Goals
-
-- No exploit execution.
-- No persistence, lateral movement, or destructive testing.
-- No offensive automation beyond safe validation checks.
-
-## Operational Guidance
-
-- Start with: `playbooks/how_to_assess_local_network_risk_non_destructively.md`
-- CVE source map: `references/cve_research_and_remediation_source_map.md`
-- Report templates:
-  - `templates/homelab_risk_report.md`
-  - `templates/homelab_findings.json`
-  - `templates/homelab_approvals.md`
-- Parser scripts:
-  - `scripts/extract_nmap_live_hosts.py`
-  - `scripts/extract_nmap_open_ports.py`
